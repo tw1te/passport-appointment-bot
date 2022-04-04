@@ -32,7 +32,16 @@ class BookingService {
   constructor(region, numberOfPeople = 1, mock = false) {
     this.region = region;
     this.mock = mock;
-    this.fetch = fetchCookie(nodeFetch);
+        this._fetch = fetchCookie(nodeFetch)
+    this.fetch = async function(url, options) {
+      options = options || {}
+      let headers = {
+          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4844.52 Safari/537.36"
+      }
+      Object.assign(headers, options.headers || {})
+      options.headers = headers
+      return this._fetch(url, options)
+    };
     this.numberOfPeople = numberOfPeople;
   }
 
